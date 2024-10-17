@@ -1,33 +1,29 @@
 import * as yup from "yup";
 import { Request, Response, NextFunction } from "express";
-import { TipoRequestBodyAdotante } from "../../tipos/tiposAdotante";
+import { TipoRequestBodyPet } from "../../tipos/tiposPet";
 import { pt } from "yup-locale-pt";
+import EnumEspecie from '../../enum/EnumEspecie';
+import EnumPorte from '../../enum/EnumPorte';
 
 yup.setLocale(pt);
 
-const esquemaBodyAdotante: yup.ObjectSchema<
-  Omit<TipoRequestBodyAdotante, "endereco">
+const esquemaBodyPet: yup.ObjectSchema<
+  Omit<TipoRequestBodyPet, "adotante">
 > = yup.object({
   nome: yup.string().defined().required(),
-  celular: yup
-    .string()
-    .defined()
-    .required()
-    .matches(
-      /^(\(?[0-9]{2}\)?)? ?([0-9]{4,5})-?([0-9]{4})$/gm,
-      "Número de celular inválido"
-    ),
-  senha: yup.string().defined().required().min(6).matches(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/gm,"Senha inválida"),
-  foto: yup.string().optional(),
+  especie: yup.string().oneOf(Object.values(EnumEspecie)).defined().required(),
+  porte: yup.string().oneOf(Object.values(EnumPorte)).defined().required(),
+  dataDeNascimento: yup.date().defined().required(),
+  adotado: yup.boolean().defined().required(),
 });
 
-const middlewareValidadorBodyAdotante = async (
+const middlewareValidadorBodyPet = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    await esquemaBodyAdotante.validate(req.body, {
+    await esquemaBodyPet.validate(req.body, {
       abortEarly: false,
     });
     return next();
@@ -46,4 +42,4 @@ const middlewareValidadorBodyAdotante = async (
   }
 };
 
-export { middlewareValidadorBodyAdotante };
+export { middlewareValidadorBodyPet };

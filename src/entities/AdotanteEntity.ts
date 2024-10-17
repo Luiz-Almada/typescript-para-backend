@@ -1,5 +1,7 @@
 // AdotanteEntity.ts
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   Entity,
   JoinColumn,
@@ -8,7 +10,8 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import EnderecoEntity from "./EnderecoEntity";
-import PetEntity from './PetEntity';
+import PetEntity from "./PetEntity";
+import { criaSenhaCriptografada } from "../Utils/senhaCriptografada";
 
 @Entity()
 export default class AdotanteEntity {
@@ -45,5 +48,12 @@ export default class AdotanteEntity {
     this.foto = foto;
     this.celular = celular;
     this.endereco = endereco;
+  }
+
+  //Hooks para senha
+  @BeforeInsert()
+  @BeforeUpdate()
+  private async criptografaSenha(senha: string) {
+    this.senha = criaSenhaCriptografada(this.senha);
   }
 }

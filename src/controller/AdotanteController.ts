@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import AdotanteEntity from "../entities/AdotanteEntity";
 import AdotanteRepository from "../repositories/AdotanteRepository";
 import EnderecoEntity from "../entities/EnderecoEntity";
-import * as yup from "yup";
+
 import {
   TipoRequestBodyAdotante,
   TipoRequestParamsAdotante,
@@ -30,9 +30,9 @@ export default class AdontanteController {
       await this.repository.criaAdotante(novoAdotante);
       return res
         .status(201)
-        .json({ data: { id: novoAdotante.id, nome, celular, endereco } });
+        .json({ dados: { id: novoAdotante.id, nome, celular, endereco } });
     } catch (error) {
-      return res.status(500).json({ error: "Erro ao criar o adotante" });
+      return res.status(500).json({ erros: "Erro ao criar o adotante" });
     }
   }
 
@@ -47,7 +47,7 @@ export default class AdontanteController {
     );
 
     if (!success) {
-      return res.status(404).json({ error: message });
+      return res.status(404).json({ erros: message });
     }
 
     return res.sendStatus(204);
@@ -58,7 +58,7 @@ export default class AdontanteController {
     res: Response<TipoResponseBodyAdotante>
   ) {
     const listaDeAdotantes = await this.repository.listaAdotantes();
-    const data = listaDeAdotantes.map((adotante) => {
+    const dados = listaDeAdotantes.map((adotante) => {
       return {
         id: adotante.id,
         nome: adotante.nome,
@@ -66,7 +66,7 @@ export default class AdontanteController {
         endereco: adotante.endereco !== null ? adotante.endereco : undefined,
       };
     });
-    return res.json({ data });
+    return res.json({ dados });
   }
 
   async deletaAdotante(
@@ -80,7 +80,7 @@ export default class AdontanteController {
     );
 
     if (!success) {
-      return res.status(404).json({ error: message });
+      return res.status(404).json({ erros: message });
     }
     return res.sendStatus(204);
   }
@@ -97,7 +97,7 @@ export default class AdontanteController {
     );
 
     if (!success) {
-      return res.status(404).json({ error: message });
+      return res.status(404).json({ erros: message });
     }
     return res.sendStatus(204);
   }
