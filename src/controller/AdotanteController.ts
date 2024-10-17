@@ -16,24 +16,20 @@ export default class AdontanteController {
     req: Request<TipoRequestParamsAdotante, {}, TipoRequestBodyAdotante>,
     res: Response<TipoResponseBodyAdotante>
   ) {
-    try {
-      const { nome, celular, endereco, foto, senha } = <AdotanteEntity>req.body;
+    const { nome, celular, endereco, foto, senha } = <AdotanteEntity>req.body;
 
-      const novoAdotante = new AdotanteEntity(
-        nome,
-        senha,
-        celular,
-        foto,
-        endereco
-      );
+    const novoAdotante = new AdotanteEntity(
+      nome,
+      senha,
+      celular,
+      foto,
+      endereco
+    );
 
-      await this.repository.criaAdotante(novoAdotante);
-      return res
-        .status(201)
-        .json({ dados: { id: novoAdotante.id, nome, celular, endereco } });
-    } catch (error) {
-      return res.status(500).json({ erros: "Erro ao criar o adotante" });
-    }
+    await this.repository.criaAdotante(novoAdotante);
+    return res
+      .status(201)
+      .json({ dados: { id: novoAdotante.id, nome, celular, endereco } });
   }
 
   async atualizaAdotante(
