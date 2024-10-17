@@ -38,7 +38,7 @@ export default class PetRepository implements InterfacePetRepository {
     return { success: true };
   }
 
-  async deletaPet(id: number): Promise<{ success: boolean; message?: string }> {
+  async deletaPet(id: number) {
     const petToRemove = await this.petRepository.findOne({ where: { id } });
     if (!petToRemove) {
       throw new NaoEncontrado("Pet não encontrado");

@@ -54,9 +54,6 @@ export default class PetController {
       req.body as PetEntity
     );
 
-    if (!success) {
-      return res.status(404).json({ erros: message });
-    }
     return res.sendStatus(204);
   }
 
@@ -65,12 +62,7 @@ export default class PetController {
     res: Response<TipoResponseBodyPet>
   ) {
     const { id } = req.params;
-
-    const { success, message } = await this.repository.deletaPet(Number(id));
-
-    if (!success) {
-      return res.status(404).json({ erros: message });
-    }
+    await this.repository.deletaPet(Number(id));
     return res.sendStatus(204);
   }
 
@@ -79,14 +71,7 @@ export default class PetController {
     res: Response<TipoResponseBodyPet>
   ) {
     const { pet_id, adotante_id } = req.params;
-    const { success, message } = await this.repository.adotaPet(
-      Number(pet_id),
-      Number(adotante_id)
-    );
-
-    if (!success) {
-      return res.status(404).json({ erros: message });
-    }
+    await this.repository.adotaPet(Number(pet_id), Number(adotante_id));
     return res.sendStatus(204);
   }
 
@@ -106,31 +91,4 @@ export default class PetController {
     );
     return res.status(200).json(listaDePets);
   }
-  /*
-   atualizaPet(req: Request, res: Response) {
-    const { id } = req.params;
-    const { adotado, especie, dataDeNascimento, nome } = req.body as TipoPet;
-    const pet = listaDePets.find((pet) => pet.id === Number(id));
-    if (!pet) {
-      return res.status(404).json({ erro: "Pet não encontrado" });
-    }
-
-    pet.nome = nome;
-    pet.dataDeNascimento = dataDeNascimento;
-    pet.especie = especie;
-    pet.adotado = adotado;
-    return res.status(200).json(pet);
-  }
-
-  deletaPet(req: Request, res: Response) {
-    const { id } = req.params;
-    const pet = listaDePets.find((pet) => pet.id === Number(id));
-    if (!pet) {
-      return res.status(404).json({ erro: "Pet não encontrado" });
-    }
-    const index = listaDePets.indexOf(pet);
-    listaDePets.splice(index, 1);
-    return res.status(200).json({ mensagem: "Pet deletado com sucesso" });
-  }
- */
-}
+ }

@@ -12,7 +12,7 @@ export default class AdotanteRepository implements InterfaceAdotanteRepository {
   }
 
   async criaAdotante(adotante: AdotanteEntity): Promise<void> {
-    if(await this.verificaCelularAdotante(adotante.celular)){
+    if (await this.verificaCelularAdotante(adotante.celular)) {
       throw new RequisicaoRuim("Celular já cadastrado");
     }
     await this.repository.save(adotante);
@@ -35,9 +35,7 @@ export default class AdotanteRepository implements InterfaceAdotanteRepository {
     return { success: true };
   }
 
-  async deletaAdotante(
-    id: number
-  ): Promise<{ success: boolean; message?: string }> {
+  async deletaAdotante(id: number) {
     const adotanteToRemove = await this.repository.findOne({ where: { id } });
     if (!adotanteToRemove) {
       throw new NaoEncontrado("Adotante não encontrado");
