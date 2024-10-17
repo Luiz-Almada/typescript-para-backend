@@ -1,13 +1,13 @@
 import * as yup from "yup";
 import { Request, Response, NextFunction } from "express";
-import { TipoRequestBodyAdotante } from "../../tipos/tiposAdotante";
+import { TipoRequestBodyAbrigo } from "../../tipos/tiposAbrigo";
 import { pt } from "yup-locale-pt";
 import tratarErroValidacaoYup from "../../Utils/trataValidacaoYup";
 
 yup.setLocale(pt);
 
-const esquemaBodyAdotante: yup.ObjectSchema<
-  Omit<TipoRequestBodyAdotante, "endereco">
+const esquemaBodyAbrigo: yup.ObjectSchema<
+  Omit<TipoRequestBodyAbrigo, "endereco">
 > = yup.object({
   nome: yup.string().defined().required(),
   celular: yup
@@ -18,22 +18,21 @@ const esquemaBodyAdotante: yup.ObjectSchema<
       /^(\(?[0-9]{2}\)?)? ?([0-9]{4,5})-?([0-9]{4})$/gm,
       "Número de celular inválido"
     ),
+  email: yup.string().email().defined().required(),
   senha: yup
     .string()
     .defined()
     .required()
-    .min(6)
     .matches(
       /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/gm,
       "Senha inválida"
     ),
-  foto: yup.string().optional(),
 });
 
-export const middlewareValidadorBodyAdotante = async (
+export const middlewareValidadorBodyAbrigo = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  tratarErroValidacaoYup(esquemaBodyAdotante, req, res, next);
+  tratarErroValidacaoYup(esquemaBodyAbrigo, req, res, next);
 };
